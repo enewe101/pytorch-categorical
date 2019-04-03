@@ -7,7 +7,10 @@ class Categorical:
 
     def __init__(self, probs, dtype=torch.float32, device=None):
         self.dtype = dtype
-        self.device = device or probs.device
+        try:
+            self.device = device or probs.device
+        except AttributeError:
+            self.device = 'cpu'
         self.probs = probs.clone().detach().to(device, dtype=dtype)
         if len(self.probs.shape) != 1:
             raise ValueError("``probs`` should be a 1D-tensor.")
