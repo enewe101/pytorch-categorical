@@ -24,5 +24,5 @@ setuptools.setup(
 )
 
 print(
-    "You'll need PyTorch to use this.  Get it from https://pytorch.org/ .'
+    "You'll need PyTorch to use this.  Get it from https://pytorch.org/ ."
 )

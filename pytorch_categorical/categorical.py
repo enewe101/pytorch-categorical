@@ -8,7 +8,7 @@ class Categorical:
     def __init__(self, probs, dtype=torch.float32, device=None):
         self.dtype = dtype
         self.device = device or probs.device
-        self.probs = torch.tensor(probs, dtype=dtype, device=self.device)
+        self.probs = probs.clone().detach().to(device, dtype=dtype)
         if len(self.probs.shape) != 1:
             raise ValueError("``probs`` should be a 1D-tensor.")
         self.probs /= self.probs.sum()
@@ -56,9 +56,6 @@ class Categorical:
         small_idxs = sorted_idxs[:-num_large]
 
         return small_idxs, large_idxs
-
-
-
 
 
 
