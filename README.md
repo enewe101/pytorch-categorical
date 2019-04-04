@@ -38,7 +38,7 @@ At the time I made this, there was an open issue to incorporate a more rapid
 sampler based on the alias method, but nothing was released yet.  Hopefully
 that will get into a release soon!  For now, use this!
 
-# Tested.  It's correct and fast.
+# Tested.  It's Correct and Fast.
 I've backed this by a few simple tests, including a benchmark against torch.
 This implementation takes about 175X longer to construct a sampler with one
 million outcomes, but after this up-front cost, it yields (draws of ten
