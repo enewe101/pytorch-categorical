@@ -35,9 +35,11 @@ get into a release soon!  For now, use this!
 
 # Tested.  It's correct and fast.
 I've backed this by a few simple tests, including a benchmark against torch.
-This implementation takes about 100X longer to construct a sampler, but 
-after this up-front cost, it yields samples about 3500X faster.  So the main
-usecase is when you have to draw many samples from a stable distribution.
+This implementation takes about 175X longer to construct a sampler with one
+million outcomes, but after this up-front cost, it yields (draws of ten
+thousand) samples about 3000X faster (with greater advantage the more samples
+that are eventually drawn).  So the main usecase is when you have to draw many
+samples from a stable distribution.
 
 Run the correctness and benchmark tests: ``python test.py``.
 

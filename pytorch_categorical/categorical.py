@@ -9,12 +9,11 @@ class Categorical:
         self, probs, device=None, normalized=False
     ):
 
+        self.validate_probs_type_and_shape(probs)
+
         # Copy probs tensor; Enforce float32 dtype.  Preserve device.
         self.device = device or probs.device
         self.probs = probs.clone().detach().to(self.device, dtype=torch.float32)
-
-        if len(self.probs.shape) != 1:
-            raise ValueError("``probs`` should be a 1D-tensor.")
 
         if not normalized:
             self.probs /= self.probs.sum()
@@ -23,6 +22,18 @@ class Categorical:
         self.alias_probs = None
         self.alias_outcomes = None
         self.setup()
+
+
+    def validate_probs_type_and_shape(self, probs):
+        if not isinstance(probs, torch.Tensor):
+            raise ValueError("``probs`` should be a tensor.  Got {}.".format(
+                type(probs).__name__
+            ))
+        if len(probs.shape) != 1:
+            raise ValueError("``probs`` should be a 1D-tensor. Got {}.".format(
+                probs.shape
+            ))
+
 
 
     def __len__(self):

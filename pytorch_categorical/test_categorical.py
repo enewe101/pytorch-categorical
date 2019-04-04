@@ -24,10 +24,11 @@ class TestCategorical(TestCase):
         self.assertTrue(torch.allclose(found_probs, probs, atol=1e-3))
 
         sample_size = int(1e4)
+        total_samples = sample_size*(sample_size-1)
         sample = cat.sample((sample_size,sample_size-1))
         self.assertEqual(sample.shape, (sample_size, sample_size-1))
-        sample = sample.view((sample_size*(sample_size-1),))
-        found_probs = torch.bincount(sample).float() / sample_size
+        sample = sample.view((total_samples,))
+        found_probs = torch.bincount(sample).float() / total_samples
         self.assertTrue(torch.allclose(found_probs, probs, atol=1e-3))
 
 
@@ -84,17 +85,18 @@ class TestCategorical(TestCase):
             torch_elapsed = time.time() - start
 
             print("\tPyTorch's implementation took: {}".format(torch_elapsed))
-            print(
-                "\tThis took {} times longer".format(this_elapsed / torch_elapsed))
+            print("\tThis took {} times longer".format(
+                this_elapsed / torch_elapsed
+            ))
 
 
     def test_categorical_sample_time(self):
-        print('\n\nTiming 1 million samples from 1 million outcomes')
-        # Force synchronous CUDA operation so that CUDA ops can be timed from the
-        # cpu.
+        print('\n\nTiming ten thousand samples from one million outcomes')
+        # Force synchronous CUDA operation so that CUDA ops can be timed from
+        # the cpu.
         with launch_blocking():
             support_size = int(1e6)
-            sample_size = int(1e6)
+            sample_size = int(1e5)
             sample_times = 3
             probs = torch.rand(support_size, device='cuda')
             probs /= probs.sum()
