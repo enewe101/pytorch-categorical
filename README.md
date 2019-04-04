@@ -35,8 +35,8 @@ them.  By default
 
 # Posterity
 At the time I made this, there was an open issue to incorporate a more rapid
-sampler based on the alias method (which I use here).  Hopefully that will
-get into a release soon!  For now, use this!
+sampler based on the alias method, but nothing was released yet.  Hopefully
+that will get into a release soon!  For now, use this!
 
 # Tested.  It's correct and fast.
 I've backed this by a few simple tests, including a benchmark against torch.
