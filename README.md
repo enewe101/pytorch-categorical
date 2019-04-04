@@ -4,8 +4,13 @@ Currently, the `pytorch.distributions.Categorical` is a bit slow if you
 need to draw a large number of samples from a static categorical distribution.
 Also, you are limited to having no more than 2^24 different outcomes.
 
-If you need categorical distributions with really large support, and/or
-you need to quickly draw millions of samples, then this is for you.
+The 
+["alias method"](http://cgi.cs.mcgill.ca/~enewel3/posts/alias-method/index.html)
+let's you sample very quickly from distributions with large support, and this
+implementation in PyTorch let's you have more than 2^24 outcomes.
+
+I needed this for rapid generation of word embeddings in
+[hilbert](https://github.com/enewe101/hilbert).
 
 # Install
 
