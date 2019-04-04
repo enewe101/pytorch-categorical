@@ -24,7 +24,10 @@ you need to quickly draw millions of samples, then this is for you.
 
 	num_samples = int(1e6)
 	samples = sampler.sample((num_samples,))
-	
+
+The constructor also takes a `dtype` and a `device` if you want to specify 
+them.  By default
+
 # Posterity
 At the time I made this, there was an open issue to incorporate a more rapid
 sampler based on the alias method (which I use here).  Hopefully that will
