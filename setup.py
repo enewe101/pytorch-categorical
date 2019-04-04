@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pytorch-categorical",
-    version="0.0.1",
+    version="0.0.2",
     author="Edward Newell",
     author_email="edward.newell@gmail.com",
     description=(
