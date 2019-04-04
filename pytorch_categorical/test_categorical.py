@@ -18,13 +18,20 @@ class TestCategorical(TestCase):
         sample_size = int(1e8)
         probs = torch.rand(support_size, device='cuda')
         probs /= probs.sum()
-        cat = Categorical(probs, device='cuda')
+        cat = c.Categorical(probs, device='cuda')
         sample = cat.sample((sample_size,))
         found_probs = torch.bincount(sample).float() / sample_size
         self.assertTrue(torch.allclose(found_probs, probs, atol=1e-3))
 
+        sample_size = int(1e4)
+        sample = cat.sample((sample_size,sample_size-1))
+        self.assertEqual(sample.shape, (sample_size, sample_size-1))
+        sample = sample.view((sample_size*(sample_size-1),))
+        found_probs = torch.bincount(sample).float() / sample_size
+        self.assertTrue(torch.allclose(found_probs, probs, atol=1e-3))
 
-    def test_categorical_sample_dtype(self):
+
+    def test_categorical_sample_device(self):
         """
         Draw a large number of samples, and calculate the empirical probability
         for each outcome.  It should be close to the probability vector with
@@ -36,19 +43,19 @@ class TestCategorical(TestCase):
         cuda_probs /= cuda_probs.sum()
         cpu_probs = cuda_probs.to('cpu')
 
-        cuda_cat = Categorical(cuda_probs)
+        cuda_cat = c.Categorical(cuda_probs)
         cuda_sample = cuda_cat.sample((sample_size,))
         self.assertEqual(cuda_sample.device.type, 'cuda')
 
-        cpu_cat = Categorical(cpu_probs)
+        cpu_cat = c.Categorical(cpu_probs)
         cpu_sample = cpu_cat.sample((sample_size,))
         self.assertEqual(cpu_sample.device.type, 'cpu')
 
-        cuda_cat = Categorical(cpu_probs, device='cuda')
+        cuda_cat = c.Categorical(cpu_probs, device='cuda')
         cuda_sample = cuda_cat.sample((sample_size,))
         self.assertEqual(cuda_sample.device.type, 'cuda')
 
-        cpu_cat = Categorical(cuda_probs, device='cpu')
+        cpu_cat = c.Categorical(cuda_probs, device='cpu')
         cpu_sample = cpu_cat.sample((sample_size,))
         self.assertEqual(cpu_sample.device.type, 'cpu')
 
@@ -66,7 +73,7 @@ class TestCategorical(TestCase):
 
             start = time.time()
             for i in range(construction_times):
-                cat = Categorical(probs, device='cuda')
+                cat = c.Categorical(probs, device='cuda')
             this_elapsed = time.time() - start
 
             print('\tthis implementation took: {}'.format(this_elapsed))
@@ -92,7 +99,7 @@ class TestCategorical(TestCase):
             probs = torch.rand(support_size, device='cuda')
             probs /= probs.sum()
 
-            cat = Categorical(probs, device='cuda')
+            cat = c.Categorical(probs, device='cuda')
             start = time.time()
             for i in range(sample_times):
                 sample = cat.sample((sample_size,))

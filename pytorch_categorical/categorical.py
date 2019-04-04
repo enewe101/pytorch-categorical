@@ -5,16 +5,21 @@ import pdb
 class Categorical:
 
 
-    def __init__(self, probs, dtype=torch.float32, device=None):
-        self.dtype = dtype
-        try:
-            self.device = device or probs.device
-        except AttributeError:
-            self.device = 'cpu'
-        self.probs = probs.clone().detach().to(device, dtype=dtype)
+    def __init__(
+        self, probs, device=None, normalized=False
+    ):
+
+        # Copy probs tensor; Enforce float32 dtype.  Preserve device.
+        self.device = device or probs.device
+        self.probs = probs.clone().detach().to(self.device, dtype=torch.float32)
+
         if len(self.probs.shape) != 1:
             raise ValueError("``probs`` should be a 1D-tensor.")
-        self.probs /= self.probs.sum()
+
+        if not normalized:
+            self.probs /= self.probs.sum()
+
+        # Setup the alias outcomes and probabilities.
         self.alias_probs = None
         self.alias_outcomes = None
         self.setup()
