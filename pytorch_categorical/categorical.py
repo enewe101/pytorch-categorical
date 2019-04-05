@@ -35,7 +35,6 @@ class Categorical:
             ))
 
 
-
     def __len__(self):
         return self.probs.shape[0]
 
@@ -114,10 +113,11 @@ class Categorical:
                 larger.append(large_outcome)
 
 
-    def sample(self, shape=(1,), dtype='int64'):
-        primary_outcomes = torch.randint(0, len(self), shape, dtype=torch.long)
+    def sample(self, sample_shape=(1,), dtype='int64'):
+        primary_outcomes = torch.randint(
+            0, len(self), sample_shape, dtype=torch.long)
         secondary_outcomes = (
-            torch.rand(shape, device=self.device) > 
+            torch.rand(sample_shape, device=self.device) > 
             self.alias_probs[primary_outcomes] 
         ).long()
         return self.alias_outcomes[primary_outcomes, secondary_outcomes]
